@@ -1,64 +1,55 @@
 <script setup>
+import { ref } from 'vue'
 
+const isMenuOpen = ref(false)
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
 </script>
 
 <template>
-
-	<!-- Navbar Wrapper -->
-	<nav class="navbar navbar-expand-lg navbar-light fixed-top">
-		<div class="container d-flex justify-content-center mt-2">
-			<!-- Floating Container -->
-			<div class="custom-navbar-container px-4 py-2">
-
-				<!-- This wrapper ensures Brand and Toggler stay on one line -->
-				<div class="d-flex align-items-center justify-content-between w-100">
-
-					<!-- Branding/Profile -->
-					<div class="d-flex align-items-center brand-section">
-						<img src="/images/rojan.png" alt="Rojan Pilar profile photo" class="profile-circle me-3">
-						<div class="brand-text">
-							<span class="d-block text-dark fw-bold lh-1">Rojan</span>
-							<!-- Hidden on extra small screens to save space -->
-							<small class="text-secondary d-none d-sm-block">Full Stack Web Developer</small>
-						</div>
-					</div>
-
-					<!-- Toggler Button (Hamburger) -->
-					<button
-						class="navbar-toggler border-0 shadow-none"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#navbarNav"
-						aria-controls="navbarNav"
-						aria-expanded="false"
-						aria-label="Toggle navigation"
-					>
-						<span class="navbar-toggler-icon"></span>
-					</button>
+	<!-- FIXED: Added 'navbar-dark bg-black' and a clean shadow boundary -->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-black shadow-sm py-3" id="menu">
+		<div class="container">
+			
+			<!-- Branding/Profile Section -->
+			<div class="d-flex align-items-center brand-section">
+				<img src="/images/rojan.png" alt="Rojan Pilar profile photo" class="profile-circle me-3" style="width: 40px; height: 40px; border-radius: 50%;">
+				<div class="brand-text">
+					<span class="d-block text-white fw-bold lh-1">Rojan</span>
+					<small class="text-muted d-none d-sm-block">Full Stack Web Developer</small>
 				</div>
-
-				<!-- Collapsible Menu Links -->
-				<div class="collapse navbar-collapse" id="navbarNav">
-					<div class="navbar-nav ms-lg-4 gap-lg-4 text-center mt-3 mt-lg-0">
-						<a class="nav-link p-0" href="#landing">Home</a>
-						<a class="nav-link p-0 text-nowrap" href="#projects">My Projects</a>
-						<a class="nav-link p-0" href="#tools">Tools</a>
-						<a class="nav-link p-0" href="#contact">Contact</a>
-					</div>
-				</div>
-
 			</div>
+
+			<!-- Mobile Burger Toggler Trigger Button -->
+			<button class="navbar-toggler border-0 shadow-none" type="button" @click="toggleMenu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Collapsible Links with light readable text states -->
+			<div class="collapse navbar-collapse justify-content-end" :class="{ 'show': isMenuOpen }" id="navbarNav">
+				<div class="navbar-nav ms-lg-4 gap-lg-4 text-center mt-3 mt-lg-0">
+					<a class="nav-link text-white-50 px-2" href="#landing" @click="isMenuOpen = false">Home</a>
+					<a class="nav-link text-white-50 px-2 text-nowrap" href="#projects" @click="isMenuOpen = false">My Projects</a>
+					<a class="nav-link text-white-50 px-2" href="#tools" @click="isMenuOpen = false">Tools</a>
+					<a class="nav-link text-white px-2 active fw-bold border-bottom border-purple" href="#contact" @click="isMenuOpen = false">Contact</a>
+				</div>
+			</div>
+
 		</div>
 	</nav>
-	<!-- End of Navbar -->
-
 </template>
 
 <style scoped>
-
+/* FIXED: Clean layout boundary dimensions for your sticky positioning context */
 nav.navbar {
-	background: black !important;
-	background-color: black !important;
+	background-color: #000000 !important;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	z-index: 1050; /* Keeps it layered completely on top of scrolling sections */
 }
 
+.nav-link:hover {
+	color: #ffffff !important;
+}
 </style>
