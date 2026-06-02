@@ -1,50 +1,133 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
 const isMenuOpen = ref(false)
+const activeSection = ref('landing') // Default active section
+
+// Toggles mobile hamburger drop-down menu
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+// Sets active section when a user manually clicks a navbar item
+const setSection = (sectionName) => {
+  activeSection.value = sectionName
+  isMenuOpen.value = false // Automatically close mobile drawer menu
+}
+
+// Optional: Automatically updates active section highlighting as you scroll down the page
+const handleScroll = () => {
+  const sections = ['landing', 'projects', 'tools', 'contact']
+  const scrollPosition = window.scrollY + 200 // Offset for modern navigation bars
+
+  for (const section of sections) {
+    const el = document.getElementById(section)
+    if (el) {
+      const top = el.offsetTop
+      const height = el.offsetHeight
+      if (scrollPosition >= top && scrollPosition < top + height) {
+        activeSection.value = section
+        break
+      }
+    }
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg fixed-top py-3 px-2">
-    <div class="container d-flex justify-content-center">
-      <div class="custom-navbar-container px-4 py-2 d-flex align-items-center justify-content-between w-100">
-        
-        <div class="d-flex align-items-center brand-section">
-          <img src="/images/rojan.png" alt="Rojan" class="profile-circle me-3" style="width: 35px; height: 35px; border-radius: 50%;">
-          <div class="brand-text text-start">
-            <span class="d-block text-white fw-bold lh-1">Rojan</span>
-            <small class="text-white-50 d-none d-sm-block" style="font-size: 0.75rem;">Full Stack Web Developer</small>
-          </div>
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-black py-3" id="menu">
+    <div class="container">
+      
+      <!-- Branding / Profile Section -->
+      <div class="d-flex align-items-center brand-section">
+        <img src="/images/rojan.png" alt="Rojan Pilar profile photo" class="profile-circle me-3" style="width: 40px; height: 40px; border-radius: 50%;">
+        <div class="brand-text">
+          <span class="d-block text-white fw-bold" style="line-height: 1;">Rojan</span>
+          <small class="text-secondary d-none d-sm-block">Full Stack Web Developer</small>
         </div>
-
-        <button class="navbar-toggler border-0 shadow-none text-white" type="button" @click="isMenuOpen = !isMenuOpen">
-          <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-end" :class="{ 'show': isMenuOpen }">
-          <div class="navbar-nav ms-lg-4 gap-lg-4 text-center mt-3 mt-lg-0">
-            <a class="nav-link text-white-50 px-2" href="#landing" @click="isMenuOpen = false">Home</a>
-            <a class="nav-link text-white-50 px-2 text-nowrap" href="#projects" @click="isMenuOpen = false">My Projects</a>
-            <a class="nav-link text-white-50 px-2" href="#tools" @click="isMenuOpen = false">Tools</a>
-            <a class="nav-link text-white px-2 fw-bold" href="#contact" @click="isMenuOpen = false">Contact</a>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Mobile Hamburger Toggler Trigger Button -->
+      <button class="navbar-toggler border-0 shadow-none" type="button" @click="toggleMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Collapsible Links with Responsive Vue-Driven Highlighting -->
+      <div class="collapse navbar-collapse justify-content-end" :class="{ 'show': isMenuOpen }" id="navbarNav">
+        <div class="navbar-nav ms-lg-4 gap-lg-4 text-center mt-3 mt-lg-0">
+          
+          <!-- Home Link -->
+          <a 
+            class="nav-link custom-link" 
+            :class="{ 'active-indicator': activeSection === 'landing' }" 
+            href="#landing" 
+            @click="setSection('landing')"
+          >Home</a>
+          
+          <!-- My Projects Link -->
+          <a 
+            class="nav-link custom-link text-nowrap" 
+            :class="{ 'active-indicator': activeSection === 'projects' }" 
+            href="#projects" 
+            @click="setSection('projects')"
+          >My Projects</a>
+          
+          <!-- Tools Link -->
+          <a 
+            class="nav-link custom-link" 
+            :class="{ 'active-indicator': activeSection === 'tools' }" 
+            href="#tools" 
+            @click="setSection('tools')"
+          >Tools</a>
+          
+          <!-- Contact Link (FIXED: Active state is no longer permanently frozen here) -->
+          <a 
+            class="nav-link custom-link" 
+            :class="{ 'active-indicator': activeSection === 'contact' }" 
+            href="#contact" 
+            @click="setSection('contact')"
+          >Contact</a>
+
+        </div>
+      </div>
+
     </div>
   </nav>
 </template>
 
 <style scoped>
-.custom-navbar-container {
-  background-color: rgba(11, 12, 16, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50px;
-  backdrop-filter: blur(10px);
+nav.navbar {
+  background-color: #000000 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1050;
 }
-.nav-link {
-  transition: color 0.2s ease;
+
+/* Base custom links text styling configuration definitions */
+.custom-link {
+  color: rgba(255, 255, 255, 0.6) !important; /* Visible light gray text */
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid transparent; /* Keeps spacing layout uniform */
 }
-.nav-link:hover {
+
+/* Brighter white on element hover state transitions */
+.custom-link:hover {
   color: #ffffff !important;
+}
+
+/* Dynamic active state: Automatically turns white and bold with a purple underline */
+.custom-link.active-indicator {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #238845 !important; /* Matches your premium green theme design color */
 }
 </style>

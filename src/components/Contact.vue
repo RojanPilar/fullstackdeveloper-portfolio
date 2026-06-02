@@ -9,7 +9,7 @@ const message = ref("");
 const isLoading = ref(false);
 
 const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || "54082dd4-df30-4d82-b093-59e474f11765";
-const SITE_KEY = "6Lfi0wgTAAAAAJBiW_08gIZSmBAWKMaXHLP8KmUs";
+const SITE_KEY = "6Lfi0wgtAAAAAJBiW_08glZSmBAWkMaXHLP8KmUs";
 
 const recaptchaContainer = ref(null);
 const recaptchaWidgetId = ref(null);
