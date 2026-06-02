@@ -1,0 +1,9 @@
+import './assets/main.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js' // Includes Popper.js
+import 'notyf/notyf.min.css' // Required for toast styling
+
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')
