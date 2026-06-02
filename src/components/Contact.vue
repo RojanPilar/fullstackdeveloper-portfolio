@@ -8,8 +8,8 @@ const email = ref("");
 const message = ref("");
 const isLoading = ref(false);
 
-const WEB3FORMS_ACCESS_KEY = "a47dd65d-d9c2-4554-9165-60acb7df3851";
-const SITE_KEY = "6Lfi0wgTAAAAAJBiW_08gIZSmBAWKMaXHLP8KmUs";
+const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765";
+const SITE_KEY = "6Lfi0wgtAAAAAJBiW_08glZSmBAWkMaXHLP8KmUs";
 
 const recaptchaContainer = ref(null);
 const recaptchaWidgetId = ref(null);
@@ -78,7 +78,7 @@ onBeforeUnmount(() => { if (loadingInterval) clearInterval(loadingInterval); });
           </div>
           <div class="premium-card p-4">
             <h5 class="text-white fw-bold mb-2">Prefer Email?</h5>
-            <a href="mailto:rojan@example.com" class="btn-blue w-100 text-center text-white fw-bold d-block text-decoration-none">Email me ↗</a>
+            <a href="mailto:rojanserranopilar@gmail.com" class="btn-blue w-100 text-center text-white fw-bold d-block text-decoration-none">Email me ↗</a>
           </div>
         </div>
 
