@@ -3,7 +3,7 @@ import Navbar from './components/Navbar.vue';
 import About from './components/About.vue';
 import Projects from './components/Projects.vue';
 import Tools from './components/Tools.vue';
-import Contact from './components/Contact.vue';
+import Contact from './components/Contact.vue'; // Enforce strict Capital C import
 </script>
 
 <template>
@@ -13,7 +13,7 @@ import Contact from './components/Contact.vue';
       <About />
       <Projects />
       <Tools />
-      <Contact />
+      <Contact /> <!-- This tag renders the contact section + footer -->
     </main>
   </div>
 </template>
