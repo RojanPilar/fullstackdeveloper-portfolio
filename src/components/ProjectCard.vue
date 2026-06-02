@@ -9,7 +9,7 @@ defineProps({
   <div class="col">
     <div class="project-card p-3 h-100 d-flex flex-column text-start">
       <div class="img-placeholder mb-3">
-        <img :src="project.image" :alt="project.title" class="img-fluid rounded-4 portfolio-img" width="800" height="600" loading="lazy"> 
+        <img :src="project.image" :alt="project.title" class="img-fluid rounded-4 portfolio-img" loading="lazy"> 
       </div>
       <div class="card-content d-flex flex-column flex-grow-1">
         <h4 class="text-white fw-bold">{{ project.title }}</h4>

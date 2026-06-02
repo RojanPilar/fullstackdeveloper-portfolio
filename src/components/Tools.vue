@@ -1,5 +1,5 @@
 <script setup>
-// Static Skills Matrix
+// Static Matrix Loop
 </script>
 
 <template>
@@ -23,7 +23,7 @@
                 </div>
                 <h5 class="m-0 fw-bold">{{ tool }}</h5>
               </div>
-              <p class="tool-desc text-secondary small">Expert level implementation using modular, scalable, modern design methodologies.</p>
+              <p class="tool-desc text-secondary small">Expert-level modular UI rendering using industry frameworks.</p>
             </div>
           </div>
         </div>
@@ -33,7 +33,25 @@
       <div class="category-block mb-5 text-start">
         <h4 class="mb-4 fw-bold text-center text-md-start">MERN</h4>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-          <div class="col" v-for="tool in ['MongoDB', 'ExpressJS', 'ReactJS', 'Node']" :key="tool">
+          <div class="col" v-for="tool in ['MongoDB', 'Expressjs', 'Reactjs', 'Node']" :key="tool">
+            <div class="tool-card p-4 h-100">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-box me-3">
+                  <img :src="`/images/${tool.toLowerCase()}.png`" class="tool-icon" width="45" height="45">
+                </div>
+                <h5 class="m-0 fw-bold">{{ tool === 'Expressjs' ? 'Express.js' : tool === 'Reactjs' ? 'React.js' : tool }}</h5>
+              </div>
+              <p class="tool-desc text-secondary small">Architecting secure API routes and scalable full-stack applications.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OTHERS -->
+      <div class="category-block text-start">
+        <h4 class="mb-4 fw-bold text-center text-md-start">Other Tools</h4>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+          <div class="col" v-for="tool in ['Heroku', 'Git', 'Postman', 'Sublime']" :key="tool">
             <div class="tool-card p-4 h-100">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-box me-3">
@@ -41,7 +59,7 @@
                 </div>
                 <h5 class="m-0 fw-bold">{{ tool }}</h5>
               </div>
-              <p class="tool-desc text-secondary small">Architecting robust full-stack data structures and custom application microservices.</p>
+              <p class="tool-desc text-secondary small">Version control management, workflow tracking, and rigorous testing endpoints.</p>
             </div>
           </div>
         </div>
