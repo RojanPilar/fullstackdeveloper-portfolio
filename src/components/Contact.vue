@@ -56,7 +56,7 @@ function resetRecaptcha() {
 
 // Form Submission API Dispatch Pipeline
 const submitForm = async () => {
-    // 1. Enforce validation checkpoint check
+    // 1. FRONT-END CHECK: Ensure the user still completes your reCAPTCHA checkbox first!
     if (!recaptchaToken.value) {
         notyf.error('Please verify that you are not a robot');
         return;
@@ -65,7 +65,7 @@ const submitForm = async () => {
     isLoading.value = true;
 
     try {
-        // 2. FIXED URL: Points exactly to the live Web3Forms data endpoint
+        // 2. Fetch API dispatching standard form data fields to Web3Forms
         const response = await fetch("https://web3forms.com", {
             method: "POST",
             headers: {
@@ -77,8 +77,9 @@ const submitForm = async () => {
                 subject: subject,
                 name: name.value,
                 email: email.value,
-                message: message.value,
-                "g-recaptcha-response": recaptchaToken.value // Secure validation token pass
+                message: message.value
+                // NOTE: We removed the "g-recaptcha-response" line from this object 
+                // so it matches Web3Forms' Free Plan configuration rules!
             })
         });
 
@@ -86,40 +87,23 @@ const submitForm = async () => {
 
         if (result.success) {
             notyf.success("Message Sent Successfully!");
-            // 3. Clear all reactive input fields
+            // 3. Clear reactive text fields on success
             name.value = "";
             email.value = "";
             message.value = "";
         } else {
-            notyf.error(result.message || "Failed to submit message data.");
+            notyf.error(result.message || "Failed to process form data submission.");
         }
     } catch (error) {
         console.error("Submission Error Log:", error);
         notyf.error("A network error occurred.");
     } finally {
         isLoading.value = false;
-        // 4. Force checkbox refresh reset
+        // 4. Force checkbox widget refresh reset
         resetRecaptcha();
     }
 }
 
-// Async lifecycle validation loop
-let interval = null;
-
-onMounted(() => {
-    interval = setInterval(() => {
-        if (window.grecaptcha && window.grecaptcha.render) {
-            renderRecaptcha();
-            clearInterval(interval);
-        }
-    }, 100);
-});  
-
-onBeforeUnmount(() => {
-    if (interval) {
-        clearInterval(interval);
-    }
-});
 </script>
 
 <template>
