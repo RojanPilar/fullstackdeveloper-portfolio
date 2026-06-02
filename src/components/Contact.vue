@@ -56,8 +56,9 @@ function resetRecaptcha() {
 
 // Form Submission API Dispatch Pipeline
 const submitForm = async () => {
-    // 1. Enforce validation checkpoint check
-    if (!recaptchaToken.value) {
+
+    // Ensure the user completes the reCAPTCHA challenge before submitting the form.
+    if(!recaptchaToken.value) {
         notyf.error('Please verify that you are not a robot');
         return;
     }
@@ -65,7 +66,7 @@ const submitForm = async () => {
     isLoading.value = true;
 
     try {
-        // 2. Fetch API dispatching JSON data packet to the secure URL endpoint
+        // fetch() API sending dynamic request details to the server
         const response = await fetch("https://web3forms.com", {
             method: "POST",
             headers: {
@@ -78,16 +79,17 @@ const submitForm = async () => {
                 name: name.value,
                 email: email.value,
                 message: message.value,
-                // CRUCIAL BUG FIX: Secure token dispatched directly to Web3Forms backend
+                // FIXED: Securely passes the reCAPTCHA verification token string back to Web3Forms
                 "g-recaptcha-response": recaptchaToken.value 
             })
-        });
+        })
 
         const result = await response.json();
 
         if (result.success) {
+            console.log(result);
             notyf.success("Message Sent Successfully!");
-            // 3. Clear all reactive input fields
+            // Clear form values out on successful submission pass
             name.value = "";
             email.value = "";
             message.value = "";
@@ -95,32 +97,15 @@ const submitForm = async () => {
             notyf.error(result.message || "Failed to submit message data.");
         }
     } catch (error) {
-        console.error("Submission Error Log:", error);
+        console.log(error);
         notyf.error("A network error occurred.");
     } finally {
         isLoading.value = false;
-        // 4. Force checkbox refresh reset
+        // Reset the reCAPTCHA widget after the submission process completes
         resetRecaptcha();
     }
 }
 
-// Async lifecycle validation loop
-let interval = null;
-
-onMounted(() => {
-    interval = setInterval(() => {
-        if (window.grecaptcha && window.grecaptcha.render) {
-            renderRecaptcha();
-            clearInterval(interval);
-        }
-    }, 100);
-});  
-
-onBeforeUnmount(() => {
-    if (interval) {
-        clearInterval(interval);
-    }
-});
 </script>
 
 <template>
