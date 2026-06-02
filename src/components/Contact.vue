@@ -11,7 +11,7 @@ const message = ref("");
 const isLoading = ref(false);
 
 // Web3Forms and Google reCAPTCHA Key Credentials
-const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765";
+const WEB3FORMS_ACCESS_KEY = "6LcT9AgtAAAAAHYHhAsC9EXFy7BNEb8zdy8RaVEO";
 const SITE_KEY = '123c9d60-de54-430d-a6ee-bfc755fcd050';  
 const subject = "New message from Rojan Portfolio Contact Form";
 
