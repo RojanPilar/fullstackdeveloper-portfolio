@@ -12,7 +12,7 @@ const isLoading = ref(false);
 
 // Web3Forms and Google reCAPTCHA Key Credentials
 const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765";
-const SITE_KEY = '6LfDSQctAAAAAFxSGZhp9S_1c7oWi27SOk1F3Nm4';  
+const SITE_KEY = '6LcT9AgtAAAAAHYHhAsC9EXFy7BNEb8zdy8RaVEO';  
 const subject = "New message from Rojan Portfolio Contact Form";
 
 // reCAPTCHA References and Tokens
