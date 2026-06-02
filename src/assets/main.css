@@ -1,31 +1,35 @@
-html {
-  scroll-behavior: smooth;
-}
-body {
+/* Core Global Canvas Theme Resets */
+html, body {
   background-color: #000000 !important;
   color: #ffffff !important;
   margin: 0;
   padding: 0;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
-/* Custom premium button override mechanics */
-.btn-blue,
-.btn-purple {
-  display: inline-block;
-  background: #238845 !important;
+/* Fix Hero Section Breaking Bad Typography Outline Effects */
+.outline-text {
+  color: transparent !important;
+  -webkit-text-stroke: 1px #ffffff;
+}
+
+/* Green Brand Buttons Styling Overrides */
+.btn-blue, .btn-purple, .btn-success {
+  display: inline-block !important;
+  background-color: #238845 !important;
   border: 1px solid #1A1A1B !important;
-  color: #fff !important;
+  color: #ffffff !important;
   padding: 12px 24px;
   border-radius: 12px;
   text-decoration: none;
-  transition: .3s;
+  transition: .3s ease-in-out;
 }
 
-.btn-blue:hover,
-.btn-purple:hover {
-  background: #2fb15b !important;
-  border: 1px solid #fff !important;
-  color: #fff !important;
-  box-shadow: 0 10px 20px rgba(0,0,0,.4);
+.btn-blue:hover, .btn-purple:hover, .btn-success:hover {
+  background-color: #2fb15b !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
   transform: translateY(-2px);
 }
