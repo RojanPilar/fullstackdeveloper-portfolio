@@ -10,7 +10,7 @@ const message = ref("");
 const isLoading = ref(false);
 
 const WEB3FORMS_ACCESS_KEY = "123c9d60-de54-430d-a6ee-bfc755fcd050";
-const SITE_KEY = '6Lfi0wgtAAAAAJBiW_08glZSmBAWkMaXHLP8KmUs';
+const SITE_KEY = '6Lf1SActAAAAADULk77EY7Klpt3hWUuAxCK2zfBw';
 const subject = "New message from Rojan Portfolio Contact Form";
 
 const recaptchaContainer = ref(null);
