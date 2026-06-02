@@ -66,7 +66,7 @@ const submitForm = async () => {
 
     try {
         // 2. FIXED URL: Points exactly to the live Web3Forms data endpoint
-        const response = await fetch("https://web3forms.com", {
+        const response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
