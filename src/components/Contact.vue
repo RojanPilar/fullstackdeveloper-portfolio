@@ -10,8 +10,8 @@ const message = ref("");
 const isLoading = ref(false);
 
 // REPLACE THESE WITH YOUR KEYS
-const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY_HERE";
-const SITE_KEY = 'YOUR_GOOGLE_RECAPTCHA_SITE_KEY_HERE';  
+const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765";
+const SITE_KEY = '6Lfi0wgtAAAAAJBiW_08glZSmBAWkMaXHLP8KmUs';
 const subject = "New message from Portfolio Contact Form";
 
 const recaptchaContainer = ref(null);
