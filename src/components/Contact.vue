@@ -4,42 +4,49 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const notyf = new Notyf();
 
-// Form Fields State Elements
+// Form Input Values (Reactive State Variables)
 const name = ref("");
 const email = ref("");
 const message = ref("");
 const isLoading = ref(false);
 
-// Configuration Credentials
-const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765"; 
-const SITE_KEY = "6LcT9AgtAAAAAOWI_0B-CEK4nK3K1dKUdMzUmWwW";
+// Web3Forms Keys and Credentials
+const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765";
 const subject = "New message from Rojan Portfolio Contact Form";
 
-// reCAPTCHA Targeting References & Tokens
+// reCAPTCHA Integration Configurations
+const SITE_KEY = '6LcT9AgtAAAAAHYHhAsC9EXFy7BNEb8zdy8RaVEO';  
 const recaptchaContainer = ref(null);
 const recaptchaWidgetId = ref(null);
 const recaptchaToken = ref('');
-let loadingInterval = null;
 
+// Runs when the user successfully completes the reCAPTCHA challenge
 function onRecaptchaSuccess(token) {
     recaptchaToken.value = token;
 }
 
+// Runs when the reCAPTCHA verification expires
 function onRecaptchaExpired() {
     recaptchaToken.value = '';
 }
 
+// Creates and displays the reCAPTCHA widget
 function renderRecaptcha() {
-    if (!window.grecaptcha) return;
+    if (!window.grecaptcha) {
+        console.error('reCAPTCHA not loaded');
+        return;
+    }
+
     recaptchaWidgetId.value = window.grecaptcha.render(recaptchaContainer.value, {
         sitekey: SITE_KEY,
         size: 'normal',
-        theme: 'dark',
+        theme: 'dark', // Perfectly aligns with your premium black layout
         callback: onRecaptchaSuccess,
         'expired-callback': onRecaptchaExpired,
     });
 }
 
+// Resets the reCAPTCHA widget safely after submissions
 function resetRecaptcha() {
     if (recaptchaWidgetId.value !== null) {
         window.grecaptcha.reset(recaptchaWidgetId.value);
@@ -47,8 +54,9 @@ function resetRecaptcha() {
     }
 }
 
-// Submission Processing Flow Engine
+// Form Submission API Dispatch Pipeline
 const submitForm = async () => {
+    // 1. Enforce validation checkpoint check
     if (!recaptchaToken.value) {
         notyf.error('Please verify that you are not a robot');
         return;
@@ -57,6 +65,7 @@ const submitForm = async () => {
     isLoading.value = true;
 
     try {
+        // 2. Fetch API dispatching JSON data packet to the secure URL endpoint
         const response = await fetch("https://web3forms.com", {
             method: "POST",
             headers: {
@@ -69,7 +78,8 @@ const submitForm = async () => {
                 name: name.value,
                 email: email.value,
                 message: message.value,
-                "g-recaptcha-response": recaptchaToken.value // Secure validation token pass
+                // CRUCIAL BUG FIX: Secure token dispatched directly to Web3Forms backend
+                "g-recaptcha-response": recaptchaToken.value 
             })
         });
 
@@ -77,34 +87,38 @@ const submitForm = async () => {
 
         if (result.success) {
             notyf.success("Message Sent Successfully!");
-            // Clear out fields on successful form transmission
+            // 3. Clear all reactive input fields
             name.value = "";
             email.value = "";
             message.value = "";
         } else {
-            notyf.error(result.message || "Failed to process form dispatch pipeline.");
+            notyf.error(result.message || "Failed to submit message data.");
         }
     } catch (error) {
-        console.error(error);
+        console.error("Submission Error Log:", error);
         notyf.error("A network error occurred.");
     } finally {
         isLoading.value = false;
+        // 4. Force checkbox refresh reset
         resetRecaptcha();
     }
 }
 
+// Async lifecycle validation loop
+let interval = null;
+
 onMounted(() => {
-    loadingInterval = setInterval(() => {
+    interval = setInterval(() => {
         if (window.grecaptcha && window.grecaptcha.render) {
             renderRecaptcha();
-            clearInterval(loadingInterval);
+            clearInterval(interval);
         }
     }, 100);
-});
+});  
 
 onBeforeUnmount(() => {
-    if (loadingInterval) {
-        clearInterval(loadingInterval);
+    if (interval) {
+        clearInterval(interval);
     }
 });
 </script>
@@ -115,7 +129,7 @@ onBeforeUnmount(() => {
         <div class="container">
             <div class="row g-4 g-lg-5 align-items-center">
 
-                <!-- Left Content: Intro & Email -->
+                <!-- Left Column: Intro & Email Card -->
                 <div class="col-lg-6 text-start">
                     <div class="mb-5 text-center text-lg-start">
                         <h2 class="text-white fw-bold display-6 mb-3">Let's Connect!</h2>
@@ -133,7 +147,7 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
 
-                <!-- Right Content: Form Interface Integration -->
+                <!-- Right Column: Form Interface Integration -->
                 <div class="col-lg-6 text-start">
                     <div class="premium-card p-4 p-md-5">
                         <h3 class="text-white fw-bold mb-1">Get in Touch</h3>
@@ -141,7 +155,6 @@ onBeforeUnmount(() => {
 
                         <!-- Form Submission Prevent Directive Attached -->
                         <form @submit.prevent="submitForm">
-                            <!-- FIXED: Bound v-model so text fields capture user typing data -->
                             <input 
                                 type="text" 
                                 v-model="name" 
@@ -164,7 +177,7 @@ onBeforeUnmount(() => {
                                 required
                             ></textarea>
 
-                            <!-- Google reCAPTCHA Target Container Box -->
+                            <!-- Google reCAPTCHA Render Target Box -->
                             <div class="d-flex justify-content-center justify-content-lg-start mb-4">
                                 <div ref="recaptchaContainer"></div>
                             </div>
@@ -220,7 +233,6 @@ onBeforeUnmount(() => {
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
     border-radius: 16px !important;
 }
-/* FIXED: Forced readable white input text style properties */
 .premium-input {
     background-color: #1f2833 !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -234,21 +246,5 @@ onBeforeUnmount(() => {
 }
 .premium-input::placeholder {
     color: rgba(255, 255, 255, 0.4) !important;
-}
-.btn-purple {
-    background-color: #238845 !important;
-    border-color: #1A1A1B !important;
-    transition: background 0.3s ease;
-}
-.btn-purple:hover {
-    background-color: #2fb15b !important;
-}
-.btn-blue {
-    background-color: #238845 !important;
-    border-color: #1A1A1B !important;
-}
-.btn-success {
-    background-color: #238845 !important;
-    border-color: #1A1A1B !important;
 }
 </style>
