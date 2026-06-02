@@ -56,7 +56,7 @@ function resetRecaptcha() {
 
 // Form Submission API Dispatch Pipeline
 const submitForm = async () => {
-    // 1. FRONT-END CHECK: Ensure the user still completes your reCAPTCHA checkbox first!
+    // 1. Enforce validation checkpoint check
     if (!recaptchaToken.value) {
         notyf.error('Please verify that you are not a robot');
         return;
@@ -65,7 +65,7 @@ const submitForm = async () => {
     isLoading.value = true;
 
     try {
-        // 2. Fetch API dispatching standard form data fields to Web3Forms
+        // 2. FIXED URL: Points exactly to the live Web3Forms data endpoint
         const response = await fetch("https://web3forms.com", {
             method: "POST",
             headers: {
@@ -77,9 +77,8 @@ const submitForm = async () => {
                 subject: subject,
                 name: name.value,
                 email: email.value,
-                message: message.value
-                // NOTE: We removed the "g-recaptcha-response" line from this object 
-                // so it matches Web3Forms' Free Plan configuration rules!
+                message: message.value,
+                "g-recaptcha-response": recaptchaToken.value // Secure validation token pass
             })
         });
 
@@ -87,23 +86,40 @@ const submitForm = async () => {
 
         if (result.success) {
             notyf.success("Message Sent Successfully!");
-            // 3. Clear reactive text fields on success
+            // 3. Clear all reactive input fields
             name.value = "";
             email.value = "";
             message.value = "";
         } else {
-            notyf.error(result.message || "Failed to process form data submission.");
+            notyf.error(result.message || "Failed to submit message data.");
         }
     } catch (error) {
         console.error("Submission Error Log:", error);
         notyf.error("A network error occurred.");
     } finally {
         isLoading.value = false;
-        // 4. Force checkbox widget refresh reset
+        // 4. Force checkbox refresh reset
         resetRecaptcha();
     }
 }
 
+// Async lifecycle validation loop
+let interval = null;
+
+onMounted(() => {
+    interval = setInterval(() => {
+        if (window.grecaptcha && window.grecaptcha.render) {
+            renderRecaptcha();
+            clearInterval(interval);
+        }
+    }, 100);
+});  
+
+onBeforeUnmount(() => {
+    if (interval) {
+        clearInterval(interval);
+    }
+});
 </script>
 
 <template>
@@ -137,22 +153,42 @@ const submitForm = async () => {
                         <p class="text-secondary small mb-4">Have a project or just want to say hello?</p>
 
                         <!-- Form Submission Prevent Directive Attached -->
-                        <!-- Locate this block inside src/components/Contact.vue -->
                         <form @submit.prevent="submitForm">
-                            <input type="text" v-model="name" class="form-control premium-input mb-3" placeholder="Your Name" required>
-                            <input type="email" v-model="email" class="form-control premium-input mb-3" placeholder="Your Email" required>
-                            <textarea v-model="message" class="form-control premium-input mb-4" rows="4" placeholder="Leave me a message" required></textarea>
+                            <input 
+                                type="text" 
+                                v-model="name" 
+                                class="form-control premium-input mb-3" 
+                                placeholder="Your Name" 
+                                required
+                            >
+                            <input 
+                                type="email" 
+                                v-model="email" 
+                                class="form-control premium-input mb-3" 
+                                placeholder="Your Email" 
+                                required
+                            >
+                            <textarea 
+                                v-model="message" 
+                                class="form-control premium-input mb-4" 
+                                rows="4" 
+                                placeholder="Leave me a message" 
+                                required
+                            ></textarea>
 
-                            <!-- FIXED: Insert this container to provide the mounting reference for the checkbox -->
+                            <!-- FIXED: Google reCAPTCHA Target Container Box -->
                             <div class="d-flex justify-content-center justify-content-lg-start mb-4">
                                 <div ref="recaptchaContainer"></div>
                             </div>
 
-                            <button type="submit" class="btn btn-purple w-100 py-3 fw-bold text-white" :disabled="isLoading">
+                            <button 
+                                type="submit" 
+                                class="btn btn-purple w-100 py-3 fw-bold text-white" 
+                                :disabled="isLoading"
+                            >
                                 {{ isLoading ? "Sending Message..." : "Send Message" }}
                             </button>
                         </form>
-
                     </div>
                 </div>
 
