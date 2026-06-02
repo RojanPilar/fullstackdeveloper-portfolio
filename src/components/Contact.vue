@@ -47,6 +47,7 @@ function resetRecaptcha() {
 }
 
 const submitForm = async () => {
+    // 1. FREE FRONT-END CHECK: Verifies the checkbox turns green locally before sending fields
     if (!recaptchaToken.value) {
         notyf.error('Please verify that you are not a robot');
         return;
@@ -55,7 +56,6 @@ const submitForm = async () => {
     isLoading.value = true;
 
     try {
-        // FIX 1: Correct API endpoint
         const response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: {
@@ -67,8 +67,8 @@ const submitForm = async () => {
                 subject: subject,
                 name: name.value,
                 email: email.value,
-                message: message.value,
-                "g-recaptcha-response": recaptchaToken.value
+                message: message.value
+                // Botcheck and g-recaptcha-response are omitted to remain on the free tier plan
             })
         });
 
@@ -87,9 +87,10 @@ const submitForm = async () => {
         notyf.error("A network error occurred.");
     } finally {
         isLoading.value = false;
-        resetRecaptcha();
+        resetRecaptcha(); // Refreshes your checkbox for the next message
     }
 }
+
 
 let interval = null;
 
