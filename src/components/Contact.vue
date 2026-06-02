@@ -8,6 +8,7 @@ const name = ref("");
 const email = ref("");
 const message = ref("");
 const isLoading = ref(false);
+const botcheck = ref(false);
 
 const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765";
 const subject = "New message from Rojan Portfolio Contact Form";
@@ -28,6 +29,7 @@ const submitForm = async () => {
                 name: name.value,
                 email: email.value,
                 message: message.value,
+                botcheck: botcheck.value,
             })
         });
 
@@ -38,6 +40,7 @@ const submitForm = async () => {
             name.value = "";
             email.value = "";
             message.value = "";
+            botcheck.value = false;
         } else {
             notyf.error(result.message || "Failed to submit message data.");
         }
@@ -75,30 +78,31 @@ const submitForm = async () => {
                         <h3 class="text-white fw-bold mb-1">Get in Touch</h3>
                         <p class="text-secondary small mb-4">Have a project or just want to say hello?</p>
                         <form @submit.prevent="submitForm">
-                            <input 
-                                type="text" 
-                                v-model="name" 
-                                class="form-control premium-input mb-3" 
-                                placeholder="Your Name" 
+                            <input
+                                type="text"
+                                v-model="name"
+                                class="form-control premium-input mb-3"
+                                placeholder="Your Name"
                                 required
                             >
-                            <input 
-                                type="email" 
-                                v-model="email" 
-                                class="form-control premium-input mb-3" 
-                                placeholder="Your Email" 
+                            <input
+                                type="email"
+                                v-model="email"
+                                class="form-control premium-input mb-3"
+                                placeholder="Your Email"
                                 required
                             >
-                            <textarea 
-                                v-model="message" 
-                                class="form-control premium-input mb-4" 
-                                rows="4" 
-                                placeholder="Leave me a message" 
+                            <textarea
+                                v-model="message"
+                                class="form-control premium-input mb-4"
+                                rows="4"
+                                placeholder="Leave me a message"
                                 required
                             ></textarea>
-                            <button 
-                                type="submit" 
-                                class="btn btn-purple w-100 py-3 fw-bold text-white" 
+                            <input type="checkbox" name="botcheck" class="d-none" v-model="botcheck">
+                            <button
+                                type="submit"
+                                class="btn btn-purple w-100 py-3 fw-bold text-white"
                                 :disabled="isLoading"
                             >
                                 {{ isLoading ? "Sending Message..." : "Send Message" }}
@@ -149,7 +153,7 @@ const submitForm = async () => {
 .premium-input {
     background-color: #1f2833 !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: #ffffff !important; 
+    color: #ffffff !important;
 }
 .premium-input:focus {
     background-color: #1f2833 !important;
