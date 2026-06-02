@@ -11,8 +11,8 @@ const message = ref("");
 const isLoading = ref(false);
 
 // Web3Forms and Google reCAPTCHA Key Credentials
-const WEB3FORMS_ACCESS_KEY = "6LcT9AgtAAAAAHYHhAsC9EXFy7BNEb8zdy8RaVEO";
-const SITE_KEY = '123c9d60-de54-430d-a6ee-bfc755fcd050';  
+const WEB3FORMS_ACCESS_KEY = "123c9d60-de54-430d-a6ee-bfc755fcd050";
+const SITE_KEY = '6Lf1SActAAAAADULk77EY7Klpt3hWUuAxCK2zfBw';  
 const subject = "New message from Rojan Portfolio Contact Form";
 
 // reCAPTCHA References and Tokens
@@ -142,7 +142,7 @@ onBeforeUnmount(() => {
                     <div class="premium-card p-4 d-block w-100 w-md-auto">
                         <h5 class="text-white fw-bold mb-2">Prefer Email?</h5>
                         <p class="text-secondary small mb-3">Got questions or ideas? Send me an email.</p>
-                        <a href="mailto:mnladigitalmarketing@gmail.com" class="btn btn-success w-100 rounded-3 py-2 fw-bold text-white text-decoration-none d-block text-center">Email me ↗</a>
+                        <a href="mailto:rojanserrnaopilar18@gmail.com" class="btn btn-success w-100 rounded-3 py-2 fw-bold text-white text-decoration-none d-block text-center">Email me ↗</a>
                     </div>
                 </div>
 
