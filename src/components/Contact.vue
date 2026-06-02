@@ -137,42 +137,22 @@ const submitForm = async () => {
                         <p class="text-secondary small mb-4">Have a project or just want to say hello?</p>
 
                         <!-- Form Submission Prevent Directive Attached -->
+                        <!-- Locate this block inside src/components/Contact.vue -->
                         <form @submit.prevent="submitForm">
-                            <input 
-                                type="text" 
-                                v-model="name" 
-                                class="form-control premium-input mb-3" 
-                                placeholder="Your Name" 
-                                required
-                            >
-                            <input 
-                                type="email" 
-                                v-model="email" 
-                                class="form-control premium-input mb-3" 
-                                placeholder="Your Email" 
-                                required
-                            >
-                            <textarea 
-                                v-model="message" 
-                                class="form-control premium-input mb-4" 
-                                rows="4" 
-                                placeholder="Leave me a message" 
-                                required
-                            ></textarea>
+                            <input type="text" v-model="name" class="form-control premium-input mb-3" placeholder="Your Name" required>
+                            <input type="email" v-model="email" class="form-control premium-input mb-3" placeholder="Your Email" required>
+                            <textarea v-model="message" class="form-control premium-input mb-4" rows="4" placeholder="Leave me a message" required></textarea>
 
-                            <!-- FIXED: Google reCAPTCHA Target Container Box -->
+                            <!-- FIXED: Insert this container to provide the mounting reference for the checkbox -->
                             <div class="d-flex justify-content-center justify-content-lg-start mb-4">
                                 <div ref="recaptchaContainer"></div>
                             </div>
 
-                            <button 
-                                type="submit" 
-                                class="btn btn-purple w-100 py-3 fw-bold text-white" 
-                                :disabled="isLoading"
-                            >
+                            <button type="submit" class="btn btn-purple w-100 py-3 fw-bold text-white" :disabled="isLoading">
                                 {{ isLoading ? "Sending Message..." : "Send Message" }}
                             </button>
                         </form>
+
                     </div>
                 </div>
 
