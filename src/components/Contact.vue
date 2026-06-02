@@ -10,12 +10,12 @@ const email = ref("");
 const message = ref("");
 const isLoading = ref(false);
 
-// Web3Forms Keys and Credentials
+// Web3Forms and Google reCAPTCHA Key Credentials
 const WEB3FORMS_ACCESS_KEY = "54082dd4-df30-4d82-b093-59e474f11765";
+const SITE_KEY = '6LfDSQctAAAAAFxSGZhp9S_1c7oWi27SOk1F3Nm4';  
 const subject = "New message from Rojan Portfolio Contact Form";
 
-// reCAPTCHA Integration Configurations
-const SITE_KEY = '6LcT9AgtAAAAAHYHhAsC9EXFy7BNEb8zdy8RaVEO';  
+// reCAPTCHA References and Tokens
 const recaptchaContainer = ref(null);
 const recaptchaWidgetId = ref(null);
 const recaptchaToken = ref('');
@@ -40,7 +40,7 @@ function renderRecaptcha() {
     recaptchaWidgetId.value = window.grecaptcha.render(recaptchaContainer.value, {
         sitekey: SITE_KEY,
         size: 'normal',
-        theme: 'dark', // Perfectly aligns with your premium black layout
+        theme: 'dark', // Perfectly matches your dark aesthetic
         callback: onRecaptchaSuccess,
         'expired-callback': onRecaptchaExpired,
     });
@@ -56,9 +56,8 @@ function resetRecaptcha() {
 
 // Form Submission API Dispatch Pipeline
 const submitForm = async () => {
-
-    // Ensure the user completes the reCAPTCHA challenge before submitting the form.
-    if(!recaptchaToken.value) {
+    // 1. Enforce validation checkpoint check
+    if (!recaptchaToken.value) {
         notyf.error('Please verify that you are not a robot');
         return;
     }
@@ -66,7 +65,7 @@ const submitForm = async () => {
     isLoading.value = true;
 
     try {
-        // fetch() API sending dynamic request details to the server
+        // 2. FIXED URL: Points exactly to the live Web3Forms data endpoint
         const response = await fetch("https://web3forms.com", {
             method: "POST",
             headers: {
@@ -79,17 +78,15 @@ const submitForm = async () => {
                 name: name.value,
                 email: email.value,
                 message: message.value,
-                // FIXED: Securely passes the reCAPTCHA verification token string back to Web3Forms
-                "g-recaptcha-response": recaptchaToken.value 
+                "g-recaptcha-response": recaptchaToken.value // Secure validation token pass
             })
-        })
+        });
 
         const result = await response.json();
 
         if (result.success) {
-            console.log(result);
             notyf.success("Message Sent Successfully!");
-            // Clear form values out on successful submission pass
+            // 3. Clear all reactive input fields
             name.value = "";
             email.value = "";
             message.value = "";
@@ -97,15 +94,32 @@ const submitForm = async () => {
             notyf.error(result.message || "Failed to submit message data.");
         }
     } catch (error) {
-        console.log(error);
+        console.error("Submission Error Log:", error);
         notyf.error("A network error occurred.");
     } finally {
         isLoading.value = false;
-        // Reset the reCAPTCHA widget after the submission process completes
+        // 4. Force checkbox refresh reset
         resetRecaptcha();
     }
 }
 
+// Async lifecycle validation loop
+let interval = null;
+
+onMounted(() => {
+    interval = setInterval(() => {
+        if (window.grecaptcha && window.grecaptcha.render) {
+            renderRecaptcha();
+            clearInterval(interval);
+        }
+    }, 100);
+});  
+
+onBeforeUnmount(() => {
+    if (interval) {
+        clearInterval(interval);
+    }
+});
 </script>
 
 <template>
@@ -128,7 +142,7 @@ const submitForm = async () => {
                     <div class="premium-card p-4 d-block w-100 w-md-auto">
                         <h5 class="text-white fw-bold mb-2">Prefer Email?</h5>
                         <p class="text-secondary small mb-3">Got questions or ideas? Send me an email.</p>
-                        <a href="mailto:rojanserranopilar18@gmail.com" class="btn btn-success w-100 rounded-3 py-2 fw-bold text-white text-decoration-none d-block text-center">Email me ↗</a>
+                        <a href="mailto:mnladigitalmarketing@gmail.com" class="btn btn-success w-100 rounded-3 py-2 fw-bold text-white text-decoration-none d-block text-center">Email me ↗</a>
                     </div>
                 </div>
 
@@ -162,7 +176,7 @@ const submitForm = async () => {
                                 required
                             ></textarea>
 
-                            <!-- Google reCAPTCHA Render Target Box -->
+                            <!-- FIXED: Google reCAPTCHA Target Container Box -->
                             <div class="d-flex justify-content-center justify-content-lg-start mb-4">
                                 <div ref="recaptchaContainer"></div>
                             </div>
